@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
+from decimal import Decimal
+
 
 DATA = {
     'omlet': {
@@ -28,3 +30,35 @@ DATA = {
 #     'ингредиент2': количество2,
 #   }
 # }
+
+
+def get_recipe(recipe, servings):
+    recipe_data = DATA.get(recipe)
+    recipe_dict = {}
+
+    if recipe_data:
+        for ingredient, amount in recipe_data.items():
+            if servings is not None:
+                recipe_dict[ingredient] = amount * int(servings)
+            else:
+                recipe_dict[ingredient] = amount
+
+    return {'recipe': recipe_dict}
+
+
+def omlet_recipe(request):
+    servings = request.GET.get('servings', None)
+    context = get_recipe('omlet', servings)
+    return render(request, 'calculator/index.html', context)
+
+
+def pasta_recipe(request):
+    servings = request.GET.get('servings', None)
+    context = get_recipe('pasta', servings)
+    return render(request, 'calculator/index.html', context)
+
+
+def buter_recipe(request):
+    servings = request.GET.get('servings', None)
+    context = get_recipe('buter', servings)
+    return render(request, 'calculator/index.html', context)
