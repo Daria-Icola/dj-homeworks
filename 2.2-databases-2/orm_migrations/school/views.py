@@ -7,8 +7,6 @@ from .models import Student
 def students_list(request):
     template = 'school/students_list.html'
     students = Student.objects.all().order_by('group')
-    for student in students:
-        print("teachers: ", student.teachers.all())
     context = {'object_list': students}
 
     return render(request, template, context)
